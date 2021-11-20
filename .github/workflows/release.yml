@@ -1,0 +1,32 @@
+name: Release
+
+on:  
+  schedule:
+    - cron: '0 0 * * *'  # every day at midnight
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Generate release tag
+        run: |
+          echo "release_tag=`date '+%Y-%m-%d'`" >> $GITHUB_ENV
+      - name: Create release body
+        run: |
+          release_notes="**version**: $(curl -sL https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z.ver)"
+          echo "$release_notes" > release_notes.md
+      - name: Build
+        run: |
+          curl -sLo ffmpeg.7z https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z
+          7z e ffmpeg.7z -offmpeg ffmpeg.exe -r
+          mv ffmpeg/ffmpeg.exe ffmpeg.exe
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "ffmpeg.exe"
+          token: ${{ github.token }}
+          commit: main
+          bodyFile: release_notes.md
+          tag: ${{ env.release_tag }}
