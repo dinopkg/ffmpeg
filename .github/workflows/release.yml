@@ -30,3 +30,8 @@ jobs:
           commit: main
           bodyFile: release_notes.md
           tag: ${{ env.release_tag }}
+      - name: Keep alive
+        uses: gautamkrishnar/keepalive-workflow@master
+        with:
+          committer_username: stefankuehnel
+          commit_message: Keep alive
