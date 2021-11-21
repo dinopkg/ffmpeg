@@ -5,7 +5,7 @@ on:
     - cron: '0 0 * * *'  # every day at midnight
 
 jobs:
-  build:
+  cronjob:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
