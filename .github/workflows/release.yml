@@ -22,6 +22,13 @@ jobs:
           curl -sLo ffmpeg.7z https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z
           7z e ffmpeg.7z -offmpeg ffmpeg.exe -r
           mv ffmpeg/ffmpeg.exe ffmpeg.exe
+      - name: Cleanup Prior Releases
+        uses: dev-drprasad/delete-older-releases@v0.2.0
+        with:
+          keep_latest: 0
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Release
         uses: ncipollo/release-action@v1
         with:
